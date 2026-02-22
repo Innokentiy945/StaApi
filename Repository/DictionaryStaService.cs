@@ -9,9 +9,9 @@ namespace StaApi.Repository;
 public class DictionaryStaService : IDictionarySTA
 {
     private DictionaryContext _context;
-    private ILogger _logger;
+    private ILogger<DictionaryStaService> _logger;
 
-    public DictionaryStaService(DictionaryContext context, ILogger logger)
+    public DictionaryStaService(DictionaryContext context, ILogger<DictionaryStaService> logger)
     {
         _context = context;
         _logger = logger;
