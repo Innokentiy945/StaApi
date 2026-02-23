@@ -12,17 +12,20 @@ builder.Services.AddScoped<IDictionarySTA, DictionaryStaService>();
 
 Env.Load();
 
+string dbHost = Environment.GetEnvironmentVariable("DB_HOST")
+                ?? throw new Exception("DB_HOST not found");
+
+string dbPort = Environment.GetEnvironmentVariable("DB_PORT")
+                ?? throw new Exception("DB_PORT not found");
 
 string dbName = Environment.GetEnvironmentVariable("DB_NAME") 
                 ?? throw new Exception("DB_NAME not found");
+
 string dbUser = Environment.GetEnvironmentVariable("DB_USER") 
                 ?? throw new Exception("DB_USER not found");
+
 string dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") 
                     ?? throw new Exception("DB_PASSWORD not found");
-
-//For MariaDB
-string dbHost = "127.0.0.1"; 
-string dbPort = "3306";      
 
 string connStr = $"Server={dbHost};Port={dbPort};Database={dbName};User ID={dbUser};Password={dbPassword};Charset=utf8;";
 
