@@ -26,10 +26,6 @@ string dbPort = "3306";
 
 string connStr = $"Server={dbHost};Port={dbPort};Database={dbName};User ID={dbUser};Password={dbPassword};Charset=utf8;";
 
-builder.Services.AddDbContext<DictionaryContext>(options =>
-    options.UseMySql(connStr, ServerVersion.AutoDetect(connStr))
-);
-
 //DbContext with MySQL/MariaDB
 builder.Services.AddDbContext<DictionaryContext>(options =>
     options.UseMySql(connStr, ServerVersion.AutoDetect(connStr))
