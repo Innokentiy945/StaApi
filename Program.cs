@@ -2,8 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using DotNetEnv;
 using Microsoft.OpenApi;
+using NSwag;
 using StaApi.Context;
 using StaApi.Repository;
+using OpenApiInfo = Microsoft.OpenApi.Models.OpenApiInfo;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IDictionarySTA, DictionaryStaService>();

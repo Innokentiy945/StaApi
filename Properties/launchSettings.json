@@ -19,7 +19,6 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-
     "swagger": {
       "commandName": "Project",
       "dotnetRunMessages": true,
@@ -29,8 +28,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    },"profiles": {
-      
     }
   }
 }

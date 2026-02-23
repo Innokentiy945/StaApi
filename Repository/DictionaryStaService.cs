@@ -88,7 +88,7 @@ public class DictionaryStaService : IDictionarySTA
     {
 
         var json = await File.ReadAllTextAsync(
-            "C:\\SerbianTrainingApplication\\ServerSTA\\StaApi\\Utils\\recnik_clean.json");
+            @"Utils/recnik_clean.json");
 
 
         var data = JsonConvert.DeserializeObject<List<DictionaryModel>>(json);
