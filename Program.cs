@@ -12,22 +12,22 @@ builder.Services.AddScoped<IDictionarySTA, DictionaryStaService>();
 
 Env.Load();
 
-string dbHost = Environment.GetEnvironmentVariable("DB_HOST")
-                ?? throw new Exception("DB_HOST not found");
+string DB_HOST = Environment.GetEnvironmentVariable("DB_HOST")
+                 ?? throw new Exception("DB_HOST not found");
 
-string dbPort = Environment.GetEnvironmentVariable("DB_PORT")
-                ?? throw new Exception("DB_PORT not found");
+string DB_PORT = Environment.GetEnvironmentVariable("DB_PORT")
+                 ?? throw new Exception("DB_PORT not found");
 
-string dbName = Environment.GetEnvironmentVariable("DB_NAME") 
-                ?? throw new Exception("DB_NAME not found");
+string DB_NAME = Environment.GetEnvironmentVariable("DB_NAME") 
+                 ?? throw new Exception("DB_NAME not found");
 
-string dbUser = Environment.GetEnvironmentVariable("DB_USER") 
-                ?? throw new Exception("DB_USER not found");
+string DB_USER = Environment.GetEnvironmentVariable("DB_USER") 
+                 ?? throw new Exception("DB_USER not found");
 
-string dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") 
-                    ?? throw new Exception("DB_PASSWORD not found");
+string DB_PASSWORD = Environment.GetEnvironmentVariable("DB_PASSWORD") 
+                     ?? throw new Exception("DB_PASSWORD not found");
 
-string connStr = $"Server={dbHost};Port={dbPort};Database={dbName};User ID={dbUser};Password={dbPassword};Charset=utf8;";
+string connStr = $"Server={DB_HOST};Port={DB_PORT};Database={DB_NAME};User ID={DB_USER};Password={DB_PASSWORD};Charset=utf8;";
 
 //DbContext with MySQL/MariaDB
 builder.Services.AddDbContext<DictionaryContext>(options =>
