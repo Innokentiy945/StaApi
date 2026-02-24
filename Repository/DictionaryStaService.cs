@@ -72,7 +72,7 @@ public class DictionaryStaService : IDictionarySTA
                 Id = Guid.NewGuid(),
                 Word = word,
                 Definition = defenition,
-                PartOfSpeech = partOfSpeech
+                Pos = partOfSpeech
             };
         
             await _context.DictionaryItem.AddAsync(input);
@@ -98,7 +98,7 @@ public class DictionaryStaService : IDictionarySTA
             Id = Guid.NewGuid(),
             Word = x.Word,
             Definition = x.Definition,
-            PartOfSpeech = x.PartOfSpeech
+            Pos = x.Pos
         }).ToList();
         
         await _context.DictionaryItem.AddRangeAsync(entities);

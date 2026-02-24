@@ -15,5 +15,5 @@ public class DictionaryModel
     [Required]
     public string Definition { get; set; }
 
-    public string PartOfSpeech { get; set; }
+    public string Pos { get; set; }
 }
