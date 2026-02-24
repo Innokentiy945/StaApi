@@ -8,12 +8,10 @@ public class DictionaryModel
 {
     [Key]
     public Guid Id { get; set; }
-
-    [Required]
+    
     [Column("word")]
     public string Word { get; set; }
-
-    [Required]
+    
     [Column("definition")]
     public string Definition { get; set; }
 
