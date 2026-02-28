@@ -22,7 +22,8 @@ public class DictionaryStaService : IDictionarySTA
         try
         {
             _logger.LogInformation("Getting all words");
-            return await _context.DictionaryItem.ToListAsync();
+            int limitOfWords = 1000;
+            return await _context.DictionaryItem.OrderByDescending(x => x.Id).Take(limitOfWords).ToListAsync();
         }
         catch (Exception ex)
         {
@@ -83,7 +84,7 @@ public class DictionaryStaService : IDictionarySTA
             _logger.LogError(ex.Message);
         }
     }
-
+    
     public async Task tempUploadData()
     {
 
