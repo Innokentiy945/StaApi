@@ -44,11 +44,12 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
+// if (!app.Environment.IsDevelopment())
+// {
+//     
+// }
+app.UseExceptionHandler("/Error");
+app.UseHsts();
 
 app.UseSwagger();
 app.UseSwaggerUI();
