@@ -85,30 +85,41 @@ public class DictionaryStaService : IDictionarySTA
         }
     }
     
+    
     public async Task tempUploadData()
     {
+        var json = await File.ReadAllTextAsync(@"/srLexResult.json");
 
-        var json = await File.ReadAllTextAsync(
-            @"Repository/srLexResult.json");
+        var rawData = JsonConvert.DeserializeObject<List<dynamic>>(json);
 
+        const int batchSize = 1000;
 
-        var data = JsonConvert.DeserializeObject<List<DictionaryMorphologyModel>>(json);
-        
-        var entities = data.Select(x => new DictionaryMorphologyModel
+        for (int i = 0; i < rawData.Count; i += batchSize)
         {
-            Id = x.Id,
-            Wordform = x.Wordform,
-            Lemma = x.Lemma,
-            Msd = x.Msd,
-            Type = x.Type,
-            Upos = x.Upos,
-            Features = x.Features,
-            Morph = x.Morph,
-            Frequency = x.Frequency,
-            PerMillion = x.PerMillion
-        }).ToList();
-        
-        await _context.DictionaryMorphologyItem.AddRangeAsync(entities);
-        await _context.SaveChangesAsync();
+            var batchRaw = rawData.Skip(i).Take(batchSize);
+
+            var entities = batchRaw.Select(x => new DictionaryMorphologyModel
+            {
+                Id = Guid.Parse((string)x.id),
+
+                Wordform = (string)x.wordform,
+                Lemma = (string)x.lemma,
+                Msd = (string)x.msd,
+                Type = (string)x.type,
+                Upos = (string)x.upos,
+
+                Features = JsonConvert.SerializeObject(x.features),
+                Morph = JsonConvert.SerializeObject(x.morph),
+
+                Frequency = x.frequency != null ? (double)x.frequency : 0,
+                PerMillion = x.per_million != null ? (double)x.per_million : 0
+            }).ToList();
+
+            await _context.DictionaryMorphologyItem.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+
+            // важно для памяти
+            _context.ChangeTracker.Clear();
+        }
     }
 }
