@@ -19,31 +19,31 @@ public class DictionaryController : ControllerBase
 
     [HttpGet]
     [Route("getAllWords")]
-    public async Task<List<DictionaryModel>> getAllWords()
+    public async Task<List<DictionaryExplanationaryModel>> getAllWords()
     {
         return await _dictionarySta.getAllWords();
     }
 
     [HttpGet]
     [Route("getWordById/{id}")]
-    public async Task<DictionaryModel?> getWordById(int id)
+    public async Task<DictionaryExplanationaryModel?> getWordById(int id)
     {
         return await _dictionarySta.getWordById(id);
     }
 
     [HttpPost]
     [Route("searchWord")]
-    public async Task<List<DictionaryModel>> searchWord(string word)
+    public async Task<List<DictionaryExplanationaryModel>> searchWord(string word)
     {
         return await _dictionarySta.searchWord(word);
     }
 
-    // [HttpPost]
-    // [Route("tempAddData")]
-    // public async Task tempUploadData()
-    // {
-    //     await _dictionarySta.tempUploadData();
-    // }
+    [HttpPost]
+    [Route("tempAddData")]
+    public async Task tempUploadData()
+    {
+        await _dictionarySta.tempUploadData();
+    }
 
     // [HttpPost]
     // [Route("addUsersWord")]

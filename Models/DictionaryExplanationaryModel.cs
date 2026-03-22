@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace StaApi.Models;
 
 [Table("DictionaryTable")]
-public class DictionaryModel
+public class DictionaryExplanationaryModel
 {
     [Key]
     public Guid Id { get; set; }

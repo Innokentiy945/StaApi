@@ -9,5 +9,6 @@ public class DictionaryContext : DbContext
     {
         Database.EnsureCreated();
     }
-    public DbSet<DictionaryModel> DictionaryItem { get; set; }
+    public DbSet<DictionaryExplanationaryModel> DictionaryExplanatoryItem { get; set; }
+    public DbSet<DictionaryMorphologyModel> DictionaryMorphologyItem { get; set; }
 }

@@ -17,13 +17,13 @@ public class DictionaryStaService : IDictionarySTA
         _logger = logger;
     }
     
-    public async Task<List<DictionaryModel>> getAllWords()
+    public async Task<List<DictionaryExplanationaryModel>> getAllWords()
     {
         try
         {
             _logger.LogInformation("Getting all words");
             int limitOfWords = 1000;
-            return await _context.DictionaryItem.OrderByDescending(x => x.Id).Take(limitOfWords).ToListAsync();
+            return await _context.DictionaryExplanatoryItem.OrderByDescending(x => x.Id).Take(limitOfWords).ToListAsync();
         }
         catch (Exception ex)
         {
@@ -33,9 +33,9 @@ public class DictionaryStaService : IDictionarySTA
         return null;
     }
 
-    public async Task<DictionaryModel?> getWordById(int id)
+    public async Task<DictionaryExplanationaryModel?> getWordById(int id)
     {
-        var result = await _context.DictionaryItem.FindAsync(id);
+        var result = await _context.DictionaryExplanatoryItem.FindAsync(id);
         try
         {
             _logger.LogInformation("Getting word by id");
@@ -49,9 +49,9 @@ public class DictionaryStaService : IDictionarySTA
         return null;
     }
 
-    public async Task<List<DictionaryModel>> searchWord(string word)
+    public async Task<List<DictionaryExplanationaryModel>> searchWord(string word)
     {
-        var result = await _context.DictionaryItem.Where(i => i.Word == word).ToListAsync();
+        var result = await _context.DictionaryExplanatoryItem.Where(i => i.Word == word).ToListAsync();
         try
         {
             return result;
@@ -68,7 +68,7 @@ public class DictionaryStaService : IDictionarySTA
     {
         try
         {
-            var input = new DictionaryModel
+            var input = new DictionaryExplanationaryModel
             {
                 Id = Guid.NewGuid(),
                 Word = word,
@@ -76,7 +76,7 @@ public class DictionaryStaService : IDictionarySTA
                 Pos = partOfSpeech
             };
         
-            await _context.DictionaryItem.AddAsync(input);
+            await _context.DictionaryExplanatoryItem.AddAsync(input);
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
@@ -89,20 +89,26 @@ public class DictionaryStaService : IDictionarySTA
     {
 
         var json = await File.ReadAllTextAsync(
-            @"Repository/recnik_clean.json");
+            @"Repository/srLexResult.json");
 
 
-        var data = JsonConvert.DeserializeObject<List<DictionaryModel>>(json);
+        var data = JsonConvert.DeserializeObject<List<DictionaryMorphologyModel>>(json);
         
-        var entities = data.Select(x => new DictionaryModel
+        var entities = data.Select(x => new DictionaryMorphologyModel
         {
-            Id = Guid.NewGuid(),
-            Word = x.Word,
-            Definition = x.Definition,
-            Pos = x.Pos
+            Id = x.Id,
+            Wordform = x.Wordform,
+            Lemma = x.Lemma,
+            Msd = x.Msd,
+            Type = x.Type,
+            Upos = x.Upos,
+            Features = x.Features,
+            Morph = x.Morph,
+            Frequency = x.Frequency,
+            PerMillion = x.PerMillion
         }).ToList();
         
-        await _context.DictionaryItem.AddRangeAsync(entities);
+        await _context.DictionaryMorphologyItem.AddRangeAsync(entities);
         await _context.SaveChangesAsync();
     }
 }
