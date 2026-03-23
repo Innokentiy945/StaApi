@@ -38,12 +38,12 @@ public class DictionaryController : ControllerBase
         return await _dictionarySta.searchWord(word);
     }
 
-    [HttpPost]
-    [Route("tempAddData")]
-    public async Task tempUploadData()
-    {
-        await _dictionarySta.tempUploadData();
-    }
+    // [HttpPost]
+    // [Route("tempAddData")]
+    // public async Task tempUploadData()
+    // {
+    //     await _dictionarySta.tempUploadData();
+    // }
 
     // [HttpPost]
     // [Route("addUsersWord")]

@@ -1,6 +1,6 @@
-using System.ComponentModel.Design;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using StaApi.Context;
 using StaApi.Models;
 
@@ -86,40 +86,58 @@ public class DictionaryStaService : IDictionarySTA
     }
     
     
-    public async Task tempUploadData()
-    {
-        var json = await File.ReadAllTextAsync(@"/srLexResult.json");
-
-        var rawData = JsonConvert.DeserializeObject<List<dynamic>>(json);
-
-        const int batchSize = 1000;
-
-        for (int i = 0; i < rawData.Count; i += batchSize)
-        {
-            var batchRaw = rawData.Skip(i).Take(batchSize);
-
-            var entities = batchRaw.Select(x => new DictionaryMorphologyModel
-            {
-                Id = Guid.Parse((string)x.id),
-
-                Wordform = (string)x.wordform,
-                Lemma = (string)x.lemma,
-                Msd = (string)x.msd,
-                Type = (string)x.type,
-                Upos = (string)x.upos,
-
-                Features = JsonConvert.SerializeObject(x.features),
-                Morph = JsonConvert.SerializeObject(x.morph),
-
-                Frequency = x.frequency != null ? (double)x.frequency : 0,
-                PerMillion = x.per_million != null ? (double)x.per_million : 0
-            }).ToList();
-
-            await _context.DictionaryMorphologyItem.AddRangeAsync(entities);
-            await _context.SaveChangesAsync();
-
-            // важно для памяти
-            _context.ChangeTracker.Clear();
-        }
-    }
+    // public async Task tempUploadData()
+    // {
+    //     const int batchSize = 1000; 
+    //     var batch = new List<DictionaryMorphologyModel>();
+    //
+    //     using var stream = File.OpenText("");
+    //     using var reader = new JsonTextReader(stream);
+    //
+    //     await reader.ReadAsync(); 
+    //
+    //     while (await reader.ReadAsync())
+    //     {
+    //         if (reader.TokenType == JsonToken.StartObject)
+    //         {
+    //             var obj = JObject.Load(reader);
+    //
+    //             var entity = new DictionaryMorphologyModel
+    //             {
+    //                 Id = Guid.Parse((string)obj["id"]),
+    //                 Wordform = (string)obj["wordform"],
+    //                 Lemma = (string)obj["lemma"],
+    //                 Msd = (string)obj["msd"],
+    //                 Type = (string)obj["type"],
+    //                 Upos = (string)obj["upos"],
+    //                 Features = obj["features"] != null ? obj["features"].ToString(Formatting.None) : "{}",
+    //                 Morph = obj["morph"] != null ? obj["morph"].ToString(Formatting.None) : "{}",
+    //                 Frequency = obj["frequency"] != null ? (double)obj["frequency"] : 0,
+    //                 PerMillion = obj["per_million"] != null ? (double)obj["per_million"] : 0
+    //             };
+    //
+    //             batch.Add(entity);
+    //
+    //             if (batch.Count >= batchSize)
+    //             {
+    //                 await _context.DictionaryMorphologyItem.AddRangeAsync(batch);
+    //                 await _context.SaveChangesAsync();
+    //                 _context.ChangeTracker.Clear();
+    //                 batch.Clear();
+    //             }
+    //         }
+    //         else if (reader.TokenType == JsonToken.EndArray)
+    //         {
+    //             break; 
+    //         }
+    //     }
+    //
+    //
+    //     if (batch.Count > 0)
+    //     {
+    //         await _context.DictionaryMorphologyItem.AddRangeAsync(batch);
+    //         await _context.SaveChangesAsync();
+    //         _context.ChangeTracker.Clear();
+    //     }
+    // }
 }

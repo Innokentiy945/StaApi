@@ -9,19 +9,34 @@ namespace StaApi.Models;
 [Table("SrLex")]
 public class DictionaryMorphologyModel
 {
-    [Key]
+    [Column("id")]
     public Guid Id { get; set; }
 
+    [Column("wordform")]
     public string Wordform { get; set; }
+
+    [Column("lemma")]
     public string Lemma { get; set; }
+
+    [Column("msd")]
     public string Msd { get; set; }
+
+    [Column("type")]
     public string Type { get; set; }
+
+    [Column("upos")]
     public string Upos { get; set; }
-    
+
+    [Column("features")]
     public string Features { get; set; }
+
+    [Column("morph")]
     public string Morph { get; set; }
 
+    [Column("frequency")]
     public double Frequency { get; set; }
+
+    [Column("per_million")]
     public double PerMillion { get; set; }
 }
 

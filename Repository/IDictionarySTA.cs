@@ -12,5 +12,5 @@ public interface IDictionarySTA
     
     public Task addWord(string word, string defenition, string partOfSpeech);
     
-    public Task tempUploadData();
+    // public Task tempUploadData();
 }
