@@ -17,7 +17,7 @@ public class DictionaryStaService : IDictionarySTA
         _logger = logger;
     }
     
-    public async Task<List<DictionaryExplanationaryModel>> getAllWords()
+    public async Task<List<DictionaryExplanatoryModel>> getAllWords()
     {
         try
         {
@@ -33,7 +33,7 @@ public class DictionaryStaService : IDictionarySTA
         return null;
     }
 
-    public async Task<DictionaryExplanationaryModel?> getWordById(int id)
+    public async Task<DictionaryExplanatoryModel?> getWordById(int id)
     {
         var result = await _context.DictionaryExplanatoryItem.FindAsync(id);
         try
@@ -49,7 +49,7 @@ public class DictionaryStaService : IDictionarySTA
         return null;
     }
 
-    public async Task<List<DictionaryExplanationaryModel>> searchWord(string word)
+    public async Task<List<DictionaryExplanatoryModel>> searchWord(string word)
     {
         var result = await _context.DictionaryExplanatoryItem.Where(i => i.Word == word).ToListAsync();
         try
@@ -68,7 +68,7 @@ public class DictionaryStaService : IDictionarySTA
     {
         try
         {
-            var input = new DictionaryExplanationaryModel
+            var input = new DictionaryExplanatoryModel
             {
                 Id = Guid.NewGuid(),
                 Word = word,

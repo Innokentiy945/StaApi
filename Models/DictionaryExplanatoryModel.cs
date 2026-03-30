@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 
 namespace StaApi.Models;
 
-[Table("DictionaryTable")]
-public class DictionaryExplanationaryModel
+[Table("DictionaryExplanatoryTable")]
+public class DictionaryExplanatoryModel
 {
     [Key]
     public Guid Id { get; set; }

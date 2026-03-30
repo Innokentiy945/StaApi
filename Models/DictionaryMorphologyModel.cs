@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace StaApi.Models;
 
-[Table("SrLex")]
+[Table("DictionaryMorphologyTable")]
 public class DictionaryMorphologyModel
 {
     [Column("id")]
