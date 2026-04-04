@@ -9,34 +9,34 @@ namespace StaApi.Models;
 [Table("DictionaryMorphologyTable")]
 public class DictionaryMorphologyModel
 {
-    [Column("id")]
+    [JsonPropertyName("id")]
     public Guid Id { get; set; }
 
-    [Column("wordform")]
+    [JsonPropertyName("word")]
     public string Wordform { get; set; }
 
-    [Column("lemma")]
+    [JsonPropertyName("lemma")]
     public string Lemma { get; set; }
 
-    [Column("msd")]
+    [JsonPropertyName("tag")]
     public string Msd { get; set; }
 
-    [Column("type")]
+    [JsonPropertyName("type")]
     public string Type { get; set; }
 
-    [Column("upos")]
+    [JsonPropertyName("pos")]
     public string Upos { get; set; }
 
-    [Column("features")]
-    public string Features { get; set; }
+    [JsonPropertyName("features")]
+    public Features Features { get; set; }
 
-    [Column("morph")]
-    public string Morph { get; set; }
+    [JsonPropertyName("morph")]
+    public Morph Morph { get; set; }
 
-    [Column("frequency")]
+    [JsonPropertyName("frequency")]
     public double Frequency { get; set; }
 
-    [Column("per_million")]
+    [JsonPropertyName("per_million")]
     public double PerMillion { get; set; }
 }
 
