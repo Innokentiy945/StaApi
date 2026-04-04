@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 using DotNetEnv;
-using Microsoft.OpenApi;
-using NSwag;
 using StaApi.Context;
 using StaApi.Repository;
 using OpenApiInfo = Microsoft.OpenApi.Models.OpenApiInfo;
@@ -28,10 +25,10 @@ string DB_PASSWORD = Environment.GetEnvironmentVariable("DB_PASSWORD")
                      ?? throw new Exception("DB_PASSWORD not found");
 
 
-string connStr = $"Host={DB_HOST};Port={DB_PORT};Database={DB_NAME};Username={DB_USER};Password={DB_PASSWORD};";
-//DbContext with MySQL/MariaDB
+string connStr = $"Host={DB_HOST};Port={DB_PORT};Database={DB_NAME};Username={DB_USER};Password={DB_PASSWORD};Pooling=true;";
+
 builder.Services.AddDbContext<DictionaryContext>(options =>
-    options.UseMySql(connStr, ServerVersion.AutoDetect(connStr))
+    options.UseNpgsql(connStr)
 );
 
 builder.Services.AddControllersWithViews();
@@ -66,8 +63,7 @@ app.UseEndpoints(endpoints =>
 });
 app.UseAuthorization();
 
-app.MapStaticAssets();
-app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}").WithStaticAssets();
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
 
