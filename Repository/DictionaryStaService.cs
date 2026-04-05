@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using StaApi.Context;
 using StaApi.Models;
 
@@ -84,62 +82,4 @@ public class DictionaryStaService : IDictionarySTA
             _logger.LogError(ex.Message);
         }
     }
-    
-    
-    // public async Task tempUploadData()
-    // {
-    //     const int batchSize = 1000; 
-    //     var batch = new List<DictionaryMorphologyModel>();
-    //
-    //     using var stream = File.OpenText("");
-    //     using var reader = new JsonTextReader(stream);
-    //
-    //     await reader.ReadAsync(); 
-    //
-    //     while (await reader.ReadAsync())
-    //     {
-    //         if (reader.TokenType == JsonToken.StartObject)
-    //         {
-    //             var obj = JObject.Load(reader);
-    //
-    //             var entity = new DictionaryMorphologyModel
-    //             {
-    //                 Id = Guid.Parse((string)obj["id"]),
-    //                 Wordform = (string)obj["wordform"],
-    //                 Lemma = (string)obj["lemma"],
-    //                 Msd = (string)obj["msd"],
-    //                 Type = (string)obj["type"],
-    //                 Upos = (string)obj["upos"],
-    //                 Features = obj["features"] != null ? obj["features"].ToString(Formatting.None) : "{}",
-    //                 Morph = obj["morph"] != null ? obj["morph"].ToString(Formatting.None) : "{}",
-    //                 Frequency = obj["frequency"] != null ? (double)obj["frequency"] : 0,
-    //                 PerMillion = obj["per_million"] != null ? (double)obj["per_million"] : 0
-    //             };
-    //
-    //             batch.Add(entity);
-    //
-    //             if (batch.Count >= batchSize)
-    //             {
-    //                 await _context.DictionaryMorphologyItem.AddRangeAsync(batch);
-    //                 await _context.SaveChangesAsync();
-    //                 _context.ChangeTracker.Clear();
-    //                 batch.Clear();
-    //             }
-    //         }
-    //         else if (reader.TokenType == JsonToken.EndArray)
-    //         {
-    //             break; 
-    //         }
-    //     }
-    //
-    //
-    //     if (batch.Count > 0)
-    //     {
-    //         await _context.DictionaryMorphologyItem.AddRangeAsync(batch);
-    //         await _context.SaveChangesAsync();
-    //         _context.ChangeTracker.Clear();
-    //     }
-    // }
-    //
-    //
 }

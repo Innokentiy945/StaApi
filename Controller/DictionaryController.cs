@@ -37,11 +37,4 @@ public class DictionaryController : ControllerBase
     {
         return await _dictionarySta.searchWord(word);
     }
-
-    // [HttpPost]
-    // [Route("addUsersWord")]
-    // public async Task addWord(string word, string description)
-    // {
-    //     await _dictionarySta.addWord(word, description);
-    // }
 }
