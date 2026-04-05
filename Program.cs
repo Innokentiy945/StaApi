@@ -28,8 +28,9 @@ string DB_PASSWORD = Environment.GetEnvironmentVariable("DB_PASSWORD")
 string connStr = $"Host={DB_HOST};Port={DB_PORT};Database={DB_NAME};Username={DB_USER};Password={DB_PASSWORD};Pooling=true;";
 
 builder.Services.AddDbContext<DictionaryContext>(options =>
-    options.UseNpgsql(connStr)
-);
+{
+    options.UseMySql(connStr, ServerVersion.AutoDetect(connStr));
+});
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
@@ -41,10 +42,6 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// if (!app.Environment.IsDevelopment())
-// {
-//     
-// }
 app.UseExceptionHandler("/Error");
 app.UseHsts();
 
@@ -52,7 +49,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseRouting();
-// app.UseCors("AllowSpecificOrigin");
 app.UseResponseCaching();
 app.UseStaticFiles();
 
@@ -66,11 +62,3 @@ app.UseAuthorization();
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
-
-
-
-
-
-
-

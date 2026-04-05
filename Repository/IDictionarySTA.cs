@@ -9,8 +9,6 @@ public interface IDictionarySTA
     public Task<DictionaryExplanatoryModel?> getWordById(int id);
     
     public Task<List<DictionaryExplanatoryModel>> searchWord(string word);
-    
+
     public Task addWord(string word, string defenition, string partOfSpeech);
-    
-    // public Task tempUploadData();
 }
