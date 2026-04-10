@@ -8,20 +8,73 @@ public class DictionaryStaService : IDictionarySTA
 {
     private DictionaryContext _context;
     private ILogger<DictionaryStaService> _logger;
+    private int limitOfWords = 1000;
 
     public DictionaryStaService(DictionaryContext context, ILogger<DictionaryStaService> logger)
     {
         _context = context;
         _logger = logger;
     }
-    
-    public async Task<List<DictionaryExplanatoryModel>> getAllWords()
+
+    public async Task<List<DictionaryExplanatoryModel>> getExplanationaryWordsByLetter(string letter)
+    {
+        
+        var result = _context.DictionaryExplanatoryItem
+            .OrderByDescending(x => x.Id)
+            .Where(x => x.Word.StartsWith(letter)).Take(limitOfWords);
+        try
+        {
+            _logger.LogInformation("Getting explanatory words by letter");
+            return await result.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+        }
+
+        return null;
+    }
+
+    public async Task<List<DictionaryMorphologyModel>> getMorphologyWordsByLetter(string letter)
+    {
+        var result = _context.DictionaryMorphologyItem
+            .OrderByDescending(x => x.Id)
+            .Where(x => x.Wordform.StartsWith(letter)).Take(limitOfWords);
+        
+        try
+        {
+            _logger.LogInformation("Getting explanatory words by letter");
+            return await result.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+        }
+
+        return null;
+    }
+
+    public async Task<List<DictionaryExplanatoryModel>> getAllExplanatoryWords()
     {
         try
         {
-            _logger.LogInformation("Getting all words");
-            int limitOfWords = 1000;
+            _logger.LogInformation("Getting 1000 words from Explanatory Dictionary");
             return await _context.DictionaryExplanatoryItem.OrderByDescending(x => x.Id).Take(limitOfWords).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+        }
+
+        return null;
+    }
+    
+    public async Task<List<DictionaryMorphologyModel>> getAllMorphologyWords()
+    {
+        try
+        {
+            _logger.LogInformation("Getting 1000 words from Morphology Dictionary");
+            return await _context.DictionaryMorphologyItem.OrderByDescending(x => x.Id).Take(limitOfWords).ToListAsync();
         }
         catch (Exception ex)
         {

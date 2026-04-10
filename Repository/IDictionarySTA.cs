@@ -4,7 +4,13 @@ namespace StaApi.Repository;
 
 public interface IDictionarySTA
 {
-    public Task<List<DictionaryExplanatoryModel>> getAllWords();
+    public Task<List<DictionaryExplanatoryModel>> getExplanationaryWordsByLetter(string letter);
+    
+    public Task<List<DictionaryMorphologyModel>> getMorphologyWordsByLetter(string letter);
+    
+    public Task<List<DictionaryExplanatoryModel>> getAllExplanatoryWords();
+    
+    public Task<List<DictionaryMorphologyModel>> getAllMorphologyWords();
     
     public Task<DictionaryExplanatoryModel?> getWordById(int id);
     
