@@ -39,7 +39,7 @@ public class DictionaryStaService : IDictionarySTA
     {
         var result = _context.DictionaryMorphologyItem
             .OrderByDescending(x => x.Id)
-            .Where(x => x.Wordform.StartsWith(letter)).Take(limitOfWords);
+            .Where(x => x.Lemma.StartsWith(letter)).Take(limitOfWords);
         
         try
         {
