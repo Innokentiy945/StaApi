@@ -31,14 +31,14 @@ public class DictionaryController : ControllerBase
         return await _dictionarySta.getAllMorphologyWords();
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("getAllExplanatoryWordsByLetter")]
     public async Task<List<DictionaryExplanatoryModel>> GetExplanatoryWordsByletter(string letter)
     {
         return await _dictionarySta.getExplanationaryWordsByLetter(letter);
     }
     
-    [HttpGet]
+    [HttpPost]
     [Route("getAllMorphologyWordsByLetter")]
     public async Task<List<DictionaryMorphologyModel>> GetMorphologyWordsByletter(string letter)
     {
