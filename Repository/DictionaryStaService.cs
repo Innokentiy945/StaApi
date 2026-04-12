@@ -21,7 +21,8 @@ public class DictionaryStaService : IDictionarySTA
         
         var result = _context.DictionaryExplanatoryItem
             .OrderByDescending(x => x.Id)
-            .Where(x => x.Word.StartsWith(letter)).Take(limitOfWords);
+            .Where(x => x.Word.StartsWith(letter)); 
+        //.Take(limitOfWords)
         try
         {
             _logger.LogInformation("Getting explanatory words by letter");
@@ -35,23 +36,43 @@ public class DictionaryStaService : IDictionarySTA
         return null;
     }
 
-    public async Task<List<DictionaryMorphologyModel>> getMorphologyWordsByLetter(string letter)
+    // public async Task<List<DictionaryMorphologyModel>> getMorphologyWordsByLetter(string letter)
+    // {
+    //     var result = _context.DictionaryMorphologyItem
+    //         .OrderByDescending(x => x.Id)
+    //         .Where(x => x.Lemma.StartsWith(letter)).Take(limitOfWords);
+    //     
+    //     try
+    //     {
+    //         _logger.LogInformation("Getting explanatory words by letter");
+    //         return await result.ToListAsync();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         _logger.LogError(ex.Message);
+    //     }
+    //
+    //     return null;
+    // }
+    
+    public async Task<List<DictionaryMorphologyModel>> GetMorphologyWordsByLetter(string letter, DateTime? lastCreatedAt = null, Guid? lastId = null, int pageSize = 100)
     {
-        var result = _context.DictionaryMorphologyItem
-            .OrderByDescending(x => x.Id)
-            .Where(x => x.Lemma.StartsWith(letter)).Take(limitOfWords);
-        
-        try
+        var query = _context.DictionaryMorphologyItem
+            .AsNoTracking()
+            .Where(x => x.Lemma.StartsWith(letter));
+
+        if (lastCreatedAt.HasValue && lastId.HasValue)
         {
-            _logger.LogInformation("Getting explanatory words by letter");
-            return await result.ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
+            query = query.Where(x =>
+                x.CreatedAt < lastCreatedAt ||
+                (x.CreatedAt == lastCreatedAt && x.Id.CompareTo(lastId) < 0));
         }
 
-        return null;
+        return await query
+            .OrderByDescending(x => x.CreatedAt)
+            .ThenByDescending(x => x.Id)
+            .Take(pageSize)
+            .ToListAsync();
     }
 
     public async Task<List<DictionaryExplanatoryModel>> getAllExplanatoryWords()

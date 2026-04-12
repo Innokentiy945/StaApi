@@ -40,9 +40,9 @@ public class DictionaryController : ControllerBase
     
     [HttpPost]
     [Route("getAllMorphologyWordsByLetter")]
-    public async Task<List<DictionaryMorphologyModel>> GetMorphologyWordsByletter(string letter)
+    public async Task<List<DictionaryMorphologyModel>> GetMorphologyWordsByLetter(string letter, DateTime? lastCreatedAt = null, Guid? lastId = null, int pageSize = 100)
     {
-        return await _dictionarySta.getMorphologyWordsByLetter(letter);
+        return await _dictionarySta.GetMorphologyWordsByLetter(letter, lastCreatedAt, lastId, pageSize);
     }
 
     [HttpGet]

@@ -66,4 +66,7 @@ public class DictionaryMorphologyModel
 
     [JsonPropertyName("per_million")]
     public double? PerMillion { get; set; }
+    
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; set; }
 }

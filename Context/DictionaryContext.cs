@@ -5,15 +5,12 @@ namespace StaApi.Context
 {
     public class DictionaryContext : DbContext
     {
-        public DictionaryContext(DbContextOptions<DictionaryContext> options) 
-            : base(options)
+        public DictionaryContext(DbContextOptions<DictionaryContext> options) : base(options)
         {
             Database.EnsureCreated();   
         }
-
         public DbSet<DictionaryExplanatoryModel> DictionaryExplanatoryItem { get; set; }
         public DbSet<DictionaryMorphologyModel> DictionaryMorphologyItem { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DictionaryMorphologyModel>(entity =>
@@ -40,6 +37,7 @@ namespace StaApi.Context
                 entity.Property(e => e.Morph_Degree).IsRequired(false);
                 entity.Property(e => e.Morph_Gender).IsRequired(false);
                 entity.Property(e => e.Morph_Number).IsRequired(false);
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
             });
 
             base.OnModelCreating(modelBuilder);

@@ -5,8 +5,8 @@ namespace StaApi.Repository;
 public interface IDictionarySTA
 {
     public Task<List<DictionaryExplanatoryModel>> getExplanationaryWordsByLetter(string letter);
-    
-    public Task<List<DictionaryMorphologyModel>> getMorphologyWordsByLetter(string letter);
+
+    public Task<List<DictionaryMorphologyModel>> GetMorphologyWordsByLetter(string letter, DateTime? lastCreatedAt = null, Guid? lastId = null, int pageSize = 100);
     
     public Task<List<DictionaryExplanatoryModel>> getAllExplanatoryWords();
     
