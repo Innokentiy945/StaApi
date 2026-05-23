@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
-namespace StaApi.Models;
+namespace StaApi.Models.Dictionary;
 
 [Table("DictionaryMorphologyTable")]
 [Index(nameof(Lemma))]

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StaApi.Models;
+using StaApi.Models.Dictionary;
 
 namespace StaApi.Context
 {

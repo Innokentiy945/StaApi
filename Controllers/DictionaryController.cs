@@ -1,10 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StaApi.Models;
+using StaApi.Models.Dictionary;
 using StaApi.Repository;
 
 namespace StaApi.Controller;
 
 [ApiController]
+// [Authorize]
+[AllowAnonymous]
 [Route("api/dictionaryApi")]
 public class DictionaryController : ControllerBase
 {

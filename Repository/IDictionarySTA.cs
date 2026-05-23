@@ -1,4 +1,5 @@
 using StaApi.Models;
+using StaApi.Models.Dictionary;
 
 namespace StaApi.Repository;
 

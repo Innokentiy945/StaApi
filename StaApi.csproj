@@ -4,38 +4,43 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
-        <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
-        <PackageReference Include="DotNetEnv" Version="3.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.*" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 
-        <!-- MariaDB/MySQL provider for EF Core -->
+        <!-- AUTH -->
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.27" />
 
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9" />
+        <!-- EF CORE -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.27" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.27">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.27">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
 
-        <PackageReference Include="NUnit" Version="3.10.1" />
+        <!-- MYSQL PROVIDER -->
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+
+        <!-- SWAGGER -->
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+
+        <!-- UTILITIES -->
+        <PackageReference Include="DotNetEnv" Version="3.2.0" />
+
+        <!-- OPTIONAL: rate limiting (if used) -->
+        <PackageReference Include="Microsoft.AspNetCore.RateLimiting" Version="7.0.0-rc.2.22476.2" />
+
+        <!-- TESTS -->
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+        <PackageReference Include="NUnit" Version="3.10.1" />
 
-        <PackageReference Include="NSwag.AspNetCore" Version="14.3.0" />
-
-        <PackageReference Include="OpenIddict.AspNetCore" Version="7.5.0" />
-
-        <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="7.5.0" />
-
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="8.1.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.1" />
-
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Utils\Chunks\" />
+      <Folder Include="Models\AuthApplicationUsers\" />
     </ItemGroup>
 
 </Project>

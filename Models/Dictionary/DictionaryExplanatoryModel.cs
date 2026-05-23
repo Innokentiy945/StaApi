@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
-namespace StaApi.Models;
+namespace StaApi.Models.Dictionary;
 
 [Table("DictionaryExplanatoryTable")]
 public class DictionaryExplanatoryModel
