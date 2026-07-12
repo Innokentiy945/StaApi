@@ -1,28 +1,44 @@
+using System.Text.Encodings.Web;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.OpenApi.Models;
+using StaApi.AutoGeneration.Context;
+using StaApi.AutoGeneration.Patterns.PastPatterns;
+using StaApi.AutoGeneration.Patterns.PresentPatterns;
+using StaApi.AutoGeneration.Patterns.Registry;
+using StaApi.AutoGeneration.Service;
+using StaApi.AutoGeneration.Service.Generators;
+using StaApi.AutoGeneration.Validator;
 using StaApi.Context;
-using StaApi.Repository;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using StaApi.Services;
+using StaApi.Repository.Dictionary;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // -------------------- SERVICES --------------------
 
 builder.Services.AddScoped<IDictionarySTA, DictionaryStaService>();
-builder.Services.AddScoped<JwtService>();
+
+builder.Services.AddScoped<ExerciseGenerationService>();
+builder.Services.AddScoped<ExerciseValidator>();
+builder.Services.AddScoped<SlotBasedGeneratorPresent>();
+builder.Services.AddScoped<PresentPatternRegistry>();
+builder.Services.AddScoped<PastPatternRegistry>();
+builder.Services.AddScoped<PresentPositivePatterns>();
+builder.Services.AddScoped<PresentNegativePatterns>();
+builder.Services.AddScoped<PastPositivePatterns>();
+
 
 builder.Services.AddHttpContextAccessor();
 
 Env.Load();
 
 // -------------------- ENV --------------------
+string DB_HOST_CORE = Environment.GetEnvironmentVariable("DB_HOST_CORE")!;
+string DB_PORT_CORE = Environment.GetEnvironmentVariable("DB_PORT_CORE")!;
+string DB_NAME_CORE = Environment.GetEnvironmentVariable("DB_NAME_CORE")!;
+string DB_USER_CORE = Environment.GetEnvironmentVariable("DB_USER_CORE")!;
+string DB_PASSWORD_CORE = Environment.GetEnvironmentVariable("DB_PASSWORD_CORE")!;
 
 string DB_HOST_DICTIONARY = Environment.GetEnvironmentVariable("DB_HOST_DICTIONARY")!;
 string DB_PORT_DICTIONARY = Environment.GetEnvironmentVariable("DB_PORT_DICTIONARY")!;
@@ -30,17 +46,15 @@ string DB_NAME_DICTIONARY = Environment.GetEnvironmentVariable("DB_NAME_DICTIONA
 string DB_USER_DICTIONARY = Environment.GetEnvironmentVariable("DB_USER_DICTIONARY")!;
 string DB_PASSWORD_DICTIONARY = Environment.GetEnvironmentVariable("DB_PASSWORD_DICTIONARY")!;
 
-string DB_HOST_AUTH = Environment.GetEnvironmentVariable("DB_HOST_AUTH")!;
-string DB_PORT_AUTH = Environment.GetEnvironmentVariable("DB_PORT_AUTH")!;
-string DB_NAME_AUTH = Environment.GetEnvironmentVariable("DB_NAME_AUTH")!;
-string DB_USER_AUTH = Environment.GetEnvironmentVariable("DB_USER_AUTH")!;
-string DB_PASSWORD_AUTH = Environment.GetEnvironmentVariable("DB_PASSWORD_AUTH")!;
-
-string JWT_KEY = Environment.GetEnvironmentVariable("JWT_KEY")!;
-string JWT_ISSUER = Environment.GetEnvironmentVariable("JWT_ISSUER")!;
-string JWT_AUDIENCE = Environment.GetEnvironmentVariable("JWT_AUDIENCE")!;
-
 // -------------------- CONNECTION STRINGS --------------------
+string connStrCore =
+    $"Host={DB_HOST_CORE};" +
+    $"Port={DB_PORT_CORE};" +
+    $"Database={DB_NAME_CORE};" +
+    $"Username={DB_USER_CORE};" +
+    $"Password={DB_PASSWORD_CORE};" +
+    $"Protocol=Tcp;" +
+    $"Pooling=true;";
 
 string connStrDictionary =
     $"Host={DB_HOST_DICTIONARY};" +
@@ -48,30 +62,19 @@ string connStrDictionary =
     $"Database={DB_NAME_DICTIONARY};" +
     $"Username={DB_USER_DICTIONARY};" +
     $"Password={DB_PASSWORD_DICTIONARY};" +
-    $"Pooling=true;";
-
-string connStrAuth =
-    $"Host={DB_HOST_AUTH};" +
-    $"Port={DB_PORT_AUTH};" +
-    $"Database={DB_NAME_AUTH};" +
-    $"Username={DB_USER_AUTH};" +
-    $"Password={DB_PASSWORD_AUTH};" +
+    $"Protocol=Tcp;" +
     $"Pooling=true;";
 
 // -------------------- DB --------------------
 
-builder.Services.AddDbContext<DictionaryContext>(options =>
+builder.Services.AddDbContext<CoreContext>(options =>
 {
-    options.UseMySql(
-        connStrDictionary,
-        ServerVersion.AutoDetect(connStrDictionary));
+    options.UseMySql(connStrCore, ServerVersion.AutoDetect(connStrCore));
 });
 
-builder.Services.AddDbContext<AuthContext>(options =>
+builder.Services.AddDbContext<DictionaryContext>(options =>
 {
-    options.UseMySql(
-        connStrAuth,
-        ServerVersion.AutoDetect(connStrAuth));
+    options.UseMySql(connStrDictionary, ServerVersion.AutoDetect(connStrDictionary));
 });
 
 // -------------------- CORS --------------------
@@ -80,9 +83,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy
-            .WithOrigins(
-                "http://localhost:8080"
+        policy.WithOrigins(
+                "http://localhost:5175"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
@@ -90,52 +92,13 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+});
+
 // -------------------- AUTH --------------------
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-
-            ValidIssuer = JWT_ISSUER,
-            ValidAudience = JWT_AUDIENCE,
-
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(JWT_KEY))
-        };
-        
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine("AUTH FAILED: " + context.Exception.Message);
-                return Task.CompletedTask;
-            },
-            OnTokenValidated = context =>
-            {
-                Console.WriteLine("AUTH OK");
-                return Task.CompletedTask;
-            },
-            OnMessageReceived = context =>
-            {
-                context.Token = context.Request.Cookies["accessToken"];
-                return Task.CompletedTask;
-            }
-        };
-    });
-
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-});
 
 // -------------------- RATE LIMIT --------------------
 
@@ -162,44 +125,9 @@ builder.Services.AddSwaggerGen(c =>
         Title = "StaDictionaryApi",
         Version = "v1"
     });
-
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "JWT Authorization header"
-    });
-    
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
 });
 
 // -------------------- FORWARDED HEADERS --------------------
-
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor |
-        ForwardedHeaders.XForwardedProto;
-
-    options.KnownNetworks.Clear();
-    options.KnownProxies.Clear();
-});
 
 // -------------------- BUILD --------------------
 

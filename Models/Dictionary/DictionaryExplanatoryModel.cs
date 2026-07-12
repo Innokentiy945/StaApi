@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace StaApi.Models.Dictionary;
 
-[Table("DictionaryExplanatoryTable")]
+[Table("MFSW")]
 public class DictionaryExplanatoryModel
 {
     [Key]
@@ -22,4 +22,12 @@ public class DictionaryExplanatoryModel
     [Column("part_of_speech")]
     [JsonProperty("pos")]
     public string Pos { get; set; }
+    
+    [Column("translation_ru")]
+    [JsonProperty("translation_ru")]
+    public string TranslationRu { get; set; }
+    
+    [Column("translation_en")]
+    [JsonProperty("translation_en")]
+    public string TranslationEn { get; set; }
 }

@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StaApi.Models;
 using StaApi.Models.Dictionary;
-using StaApi.Repository;
+using StaApi.Repository.Dictionary;
 
-namespace StaApi.Controller;
+namespace StaApi.Controllers;
 
 [ApiController]
 // [Authorize]
@@ -25,41 +24,31 @@ public class DictionaryController : ControllerBase
     [Route("getAllExplanatoryWords")]
     public async Task<List<DictionaryExplanatoryModel>> Get1000WordsExplanatory()
     {
-        return await _dictionarySta.getAllExplanatoryWords();
-    }
-    
-    [HttpGet]
-    [Route("getAllMorphologyWords")]
-    public async Task<List<DictionaryMorphologyModel>> Get1000WordsMorphology()
-    {
-        return await _dictionarySta.getAllMorphologyWords();
+        _logger.LogInformation($"Getting explanatory words");
+        return await _dictionarySta.GetAllExplanatoryWords();
     }
 
     [HttpGet]
     [Route("getAllExplanatoryWordsByLetter")]
     public async Task<List<DictionaryExplanatoryModel>> GetExplanatoryWordsByletter(string letter)
     {
-        return await _dictionarySta.getExplanationaryWordsByLetter(letter);
-    }
-    
-    [HttpGet]
-    [Route("getAllMorphologyWordsByLetter")]
-    public async Task<List<DictionaryMorphologyModel>> GetMorphologyWordsByLetter(string letter, DateTime? lastCreatedAt = null, Guid? lastId = null, int pageSize = 100)
-    {
-        return await _dictionarySta.GetMorphologyWordsByLetter(letter, lastCreatedAt, lastId, pageSize);
+        _logger.LogInformation($"Getting explanatory words by {letter}");
+        return await _dictionarySta.GetExplanationaryWordsByLetter(letter);
     }
 
     [HttpGet]
     [Route("getWordById/{id}")]
     public async Task<DictionaryExplanatoryModel?> GetWordById(int id)
     {
-        return await _dictionarySta.getWordById(id);
+        _logger.LogInformation($"Getting word by id {id}");
+        return await _dictionarySta.GetWordById(id);
     }
 
     [HttpPost]
     [Route("searchWord")]
     public async Task<List<DictionaryExplanatoryModel>> SearchWord(string word)
     {
-        return await _dictionarySta.searchWord(word);
+        _logger.LogInformation($"Searching word {word}");
+        return await _dictionarySta.SearchWord(word);
     }
 }
