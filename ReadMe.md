@@ -1,4 +1,4 @@
-# Exercise Generation & Validation Engine
+# Serbian Langauge Exercise Generation & Validation Engine
 
 A deterministic exercise generation and validation engine built around **DataJson as the single source of truth**.
 
