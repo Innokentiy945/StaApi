@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\StaApi.props" />
-</Project>

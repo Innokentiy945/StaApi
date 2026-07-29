@@ -18,7 +18,6 @@ var builder = WebApplication.CreateBuilder(args);
 // -------------------- SERVICES --------------------
 
 builder.Services.AddScoped<IDictionarySTA, DictionaryStaService>();
-
 builder.Services.AddScoped<ExerciseGenerationService>();
 builder.Services.AddScoped<ExerciseValidator>();
 builder.Services.AddScoped<SlotBasedGeneratorPresent>();
